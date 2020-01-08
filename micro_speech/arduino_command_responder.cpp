@@ -1,11 +1,8 @@
 /* Copyright 2019 The TensorFlow Authors. All Rights Reserved.
-
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
-
     http://www.apache.org/licenses/LICENSE-2.0
-
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,10 +22,10 @@ void RespondToCommand(tflite::ErrorReporter* error_reporter,
   static bool is_initialized = false;
   if (!is_initialized) {
     // Setup LED's as outputs
-    // EAC am_hal_gpio_pinconfig(AM_BSP_GPIO_LED_RED, g_AM_HAL_GPIO_OUTPUT_12);
+    am_hal_gpio_pinconfig(AM_BSP_GPIO_LED_RED, g_AM_HAL_GPIO_OUTPUT_12);
     am_hal_gpio_pinconfig(AM_BSP_GPIO_LED_BLUE, g_AM_HAL_GPIO_OUTPUT_12);
-    // EAC am_hal_gpio_pinconfig(AM_BSP_GPIO_LED_GREEN, g_AM_HAL_GPIO_OUTPUT_12);
-    // EAC am_hal_gpio_pinconfig(AM_BSP_GPIO_LED_YELLOW, g_AM_HAL_GPIO_OUTPUT_12);
+    am_hal_gpio_pinconfig(AM_BSP_GPIO_LED_GREEN, g_AM_HAL_GPIO_OUTPUT_12);
+    am_hal_gpio_pinconfig(AM_BSP_GPIO_LED_YELLOW, g_AM_HAL_GPIO_OUTPUT_12);
     is_initialized = true;
   }
   static int count = 0;
@@ -42,23 +39,20 @@ void RespondToCommand(tflite::ErrorReporter* error_reporter,
   }
 
   // Turn on the yellow LED if 'yes' was heard.
-  // EAC am_hal_gpio_output_clear(AM_BSP_GPIO_LED_RED);
-  // EAC am_hal_gpio_output_clear(AM_BSP_GPIO_LED_YELLOW);
-  // EAC am_hal_gpio_output_clear(AM_BSP_GPIO_LED_GREEN);
+  am_hal_gpio_output_clear(AM_BSP_GPIO_LED_RED);
+  am_hal_gpio_output_clear(AM_BSP_GPIO_LED_YELLOW);
+  am_hal_gpio_output_clear(AM_BSP_GPIO_LED_GREEN);
   if (is_new_command) {
     error_reporter->Report("Heard %s (%d) @%dms", found_command, score,
                            current_time);
     if (found_command[0] == 'y') {
-      error_reporter->Report("\nYES");
-      // EAC am_hal_gpio_output_set(AM_BSP_GPIO_LED_YELLOW);
+      am_hal_gpio_output_set(AM_BSP_GPIO_LED_YELLOW);
     }
     if (found_command[0] == 'n') {
-      error_reporter->Report("\nNO");
-      // EAC am_hal_gpio_output_set(AM_BSP_GPIO_LED_RED);
+      am_hal_gpio_output_set(AM_BSP_GPIO_LED_RED);
     }
     if (found_command[0] == 'u') {
-      error_reporter->Report("\nUNKNOWN");
-      // EAC am_hal_gpio_output_set(AM_BSP_GPIO_LED_GREEN);
+      am_hal_gpio_output_set(AM_BSP_GPIO_LED_GREEN);
     }
   }
 }
